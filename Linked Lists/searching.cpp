@@ -49,3 +49,7 @@ int main() //main function, where the execution of the program begins
     cout<<search(head, 34); //search for the element 34 in the linked list
     return 0; //indicates that the program ended successfully
 }
+
+//OUTPUT: 1 (as 34 is present in the linked list)
+//TIME COMPLEXITY: O(n) where n is the number of nodes in the linked list
+//SPACE COMPLEXITY: O(1) as we are using only a constant amount of extra space
