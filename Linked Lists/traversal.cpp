@@ -45,3 +45,7 @@ int main() //main function, where the execution of the program begins
     
     return 0; //indicates that the program ended successfully
 }
+
+//OUTPUT: 22 12 34 23
+//TIME COMPLEXITY: O(n) where n is the number of nodes in the linked list
+//SPACE COMPLEXITY: O(1) as we are using only a constant amount of
