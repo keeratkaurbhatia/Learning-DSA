@@ -1,0 +1,106 @@
+/*
+class Node {
+ public:
+    int data;
+    Node *next;
+
+    Node(int x) {
+        data = x;
+        next = NULL;
+    }
+};
+*/
+
+class Solution {
+  public:
+    int lengthOfLoop(Node *head) {
+        // code here
+        Node *temp = head; //traversing node
+        vector<Node*> arr={}; //storing address of nodes
+        while(temp!=NULL) //traversing linked list
+        {
+            auto it = find(arr.begin(),arr.end(),temp); //checking if address already present in array
+            if(it==arr.end()) //if not present
+            {
+                arr.push_back(temp); //push address in array
+            }
+            else
+            {
+                int idx = distance(arr.begin(), it); //finding index of first occurrence of address
+                int len = arr.size() - idx; //length of loop = total size - index of first occurrence
+                return len; //returning length
+
+            }
+            temp=temp->next; //moving to next node
+        }
+        return 0; //if no loop return 0
+        
+        
+    }
+};
+/*
+TC: O(N^2) in worst case, O(N) in average case
+SC: O(N) for storing addresses in array
+Problem: find is O(N) operation, so in worst case if no loop present, for every node we will traverse whole array to check if address is present or not
+that is for n nodes, n*(n-1)/2 comparisons will be done (1+2+3.....), so O(N^2) in worst case
+*/
+
+//maps can be used to reduce time complexity to O(N) in all cases
+
+class Solution {
+  public:
+    int lengthOfLoop(Node *head) {
+        // code here
+        Node *temp = head;
+        unordered_map<Node*,int> seen; //map to store address of nodes and their index
+        int index=0; //index of current node
+        while(temp!=NULL) //traversing linked list
+        {
+            
+            if(seen.find(temp)!=seen.end()) //if address already present in map
+            {
+                int len = index-seen[temp]; //length of loop = current index - index of first occurrence of address.
+                //current index = total number of nodes traversed till now
+            }
+            
+            seen[temp]=index; //if address not present, store it in map with its index
+            index++; //increment index
+            temp=temp->next; //move to next node
+        }
+        return 0; //if no loop return 0
+        
+        
+    }
+};
+
+//Still, SC: O(N) for storing addresses in map
+
+
+class Solution {
+  public:
+    int lengthOfLoop(Node *head) {
+        if (!head) return 0; // empty list
+
+        Node *slow = head, *fast = head; // initialize two pointers, floyd's cycle-finding algorithm
+
+
+        while (fast!=NULL && fast->next!=NULL) 
+        { // traverse the list. fast->next checked too for fast->next->next
+            slow = slow->next; // move slow by 1
+            fast = fast->next->next; // move fast by 2
+
+            if (slow == fast) { // loop detected
+                
+                int count = 1; // count nodes in loop
+                Node *temp = slow->next; // start from next node of meeting point
+                while (temp != slow) { // traverse until we come back to meeting point
+                    count++; // increment count
+                    temp = temp->next; // move to next node
+                }
+                return count; // return length of loop
+            }
+        }
+
+        return 0; // no loop
+    }
+};
