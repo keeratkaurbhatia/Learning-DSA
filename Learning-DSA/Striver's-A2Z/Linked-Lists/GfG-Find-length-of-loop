@@ -73,6 +73,7 @@ class Solution {
     }
 };
 
+//TC: O(N) in all cases
 //Still, SC: O(N) for storing addresses in map
 
 
@@ -86,7 +87,7 @@ class Solution {
 
         while (fast!=NULL && fast->next!=NULL) 
         { // traverse the list. fast->next checked too for fast->next->next
-            slow = slow->next; // move slow by 1
+            slow = slow->next; // move slow by 1 
             fast = fast->next->next; // move fast by 2
 
             if (slow == fast) { // loop detected

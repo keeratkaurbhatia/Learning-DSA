@@ -1,0 +1,106 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+
+class Solution {
+public:
+    ListNode* sortList(ListNode* head) 
+    {
+        vector<int> arr={}; //to store values of nodes
+        ListNode* temp = head; //traversing node
+        while (temp) //until end of linked list
+        {
+            arr.push_back(temp->val); //storing values in array
+            temp=temp->next; //moving to next node
+        }
+        sort(arr.begin(),arr.end()); //sorting array
+        temp = head; //resetting traversing node to head
+        for (int i: arr) //traversing sorted array
+        {
+            
+                temp->val=i; //updating values of nodes in linked list
+           
+                temp=temp->next; //moving to next node
+            
+        }
+        return head; //returning head of sorted linked list
+    }
+};
+
+/*
+TC: O(N log N) for sorting array
+SC: O(N) for storing values in array
+Problem: we are using extra space to store values of nodes, can we do it in O(1) space?
+Yes, we can use merge sort to sort linked list in O(1) space and O(N log N) time.
+*/
+
+class Solution 
+{
+public:
+    ListNode* sortList(ListNode* head) 
+    {
+       if(head == NULL || head ->next == NULL) //if 0 or 1 node present
+            return head; //already sorted
+
+        ListNode* temp = NULL; //to store node before middle node
+        ListNode* slow = head; //to find middle node
+        ListNode* fast = head; //to find middle node
+
+        while(fast&&fast->next)
+        {
+            temp = slow;//moving temp to node before middle node
+            slow = slow->next; //moving slow by 1 step
+            fast = fast->next->next; //moving fast by 2 steps
+        }
+        //when fast reaches end, slow will be at middle
+        //temp will be at node before middle node
+        temp->next = NULL; //breaking linked list into 2 halves
+
+        ListNode* l1 = sortList(head); //sorting first half
+        ListNode* l2 = sortList(slow); //sorting second half
+        return mergelist(l1,l2); //merging 2 sorted halves
+        
+    }
+    ListNode* mergelist(ListNode* l1, ListNode* l2)
+    {
+        ListNode* ptr = new ListNode; //dummy node to store head of merged list
+        ListNode* curr = ptr; //to traverse and build merged list
+        while(l1 && l2) //until one of the lists ends
+        {
+            if(l1->val<=l2->val) //if value of l1 is smaller or equal
+            {
+                curr->next = l1; //linking l1 node to merged list
+                l1 = l1->next; //moving to next node in l1
+            }
+            else
+            {
+                curr->next = l2; //linking l2 node to merged list
+                l2 = l2->next; //moving to next node in l2
+            }
+            curr = curr->next; //moving to next node in merged list
+        }
+        if(l1) //if l1 still has nodes left
+        {
+            curr->next=l1; //linking remaining nodes of l1 to merged list
+            l1=l1->next; //moving to next node in l1
+        }
+        if(l2) //if l2 still has nodes left
+        {
+            curr->next=l2; //linking remaining nodes of l2 to merged list
+            l2 = l2->next; //moving to next node in l2
+        }
+        return ptr->next; //returning head of merged list, ptr->next as ptr is dummy node
+    }
+};
+
+/*
+TC: O(N log N) for sorting linked list using merge sort
+SC: O(1) as we are not using any extra space. For recursive stack space, O(log N) space will be used.
+*/
